@@ -1,0 +1,62 @@
+@tailwind base; 
+@tailwind components;
+@tailwind utilities;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* body{
+  background-image: linear-gradient(to top, #9ca0a332 0%, #ffffff 100%);
+} */
+
+/* 
+.ql-editor {
+  height: 400px;
+  padding: 5px;
+} */
+
+.shadow-custom {
+  filter: drop-shadow(1px 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.det{
+  background-color: #ffffff;
+}
+
+
+/* TextEditor.css */
+.text-editor-header {
+  font-size: 3rem !important;
+  font-weight: bold !important;
+}
+
+.text-editor-header-2 {
+  font-size: 2rem !important;
+  font-weight: bold;
+}
+
+.text-editor-header-3 {
+  font-size: 1.4rem !important;
+  font-weight: bold;
+}
+
+.text-editor-header-4 {
+  font-size: 1rem !important;
+  font-weight: normal;
+}
+
+
+
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #000;
+  border-radius: 50%;
+  margin-left: 5px; /* Adjust margin as needed */
+  margin-right: 5px; /* Adjust margin as needed */
+}
