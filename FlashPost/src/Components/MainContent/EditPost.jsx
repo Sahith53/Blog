@@ -1,36 +1,40 @@
-import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import ImageKit from 'imagekit';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { updateTitle, updateDescription, updateTags, updateContent, updateCoverUrl, resetForm } from '../../redux/formDataSlice';
-import TextEditor from '../BlogCreation/EditorJs';
-import instance from '../../Config/AxiosInst';
-import Author from './Author';
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import ImageKit from "imagekit";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  updateTitle,
+  updateDescription,
+  updateTags,
+  updateContent,
+  updateCoverUrl,
+  resetForm,
+} from "../../redux/formDataSlice";
+import TextEditor from "../BlogCreation/EditorJs";
+import instance from "../../Config/AxiosInst";
+import Author from "./Author";
 
 function EditPost() {
   const { blogId } = useParams();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [tags, setTags] = useState('');
-  const [coverUrl, setCoverUrl] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+  const [coverUrl, setCoverUrl] = useState("");
   const editorRef = useRef(null);
   const quillRef = useRef(null);
-  const { currentUser } = useSelector(state => state.user);
-  const [imgUrl, setImgUrl] = useState('');
-  const token = localStorage.getItem('jwt');
+  const { currentUser } = useSelector((state) => state.user);
+  const [imgUrl, setImgUrl] = useState("");
+  const token = localStorage.getItem("jwt");
   const tok = JSON.parse(token);
   const config = {
-    headers: { Authorization: `Bearer ${tok}` }
+    headers: { Authorization: `Bearer ${tok}` },
   };
 
-
-  localStorage.setItem('blogId', JSON.stringify(blogId));
-  
+  localStorage.setItem("blogId", JSON.stringify(blogId));
 
   const dispatch = useDispatch();
-
 
   // useEffect(() => {
   //   if (editorRef.current) {
@@ -60,17 +64,33 @@ function EditPost() {
 
   const [showEditor, setShowEditor] = useState(false);
 
-    //for editor js default component : 
-    const DEFAULT_INITIAL_DATA = () => {
-
-  
-      return {"time":1691867402106,"blocks":[{"id":"G61UUQLEPX","type":"header","data":{"text":"Start Writing Your Blog....","level":2}},{"id":"QS7dZaETlq","type":"paragraph","data":{"text":"asfdasfdsadf hello there&nbsp;"}},{"id":"JQtHyPZJ9i","type":"paragraph","data":{"text":"asfasf"}},{"id":"eLqUsvEHaf","type":"paragraph","data":{"text":"asf"}},{"id":"SZaxdbn_xF","type":"paragraph","data":{"text":"asfd"}}],"version":"2.27.2"}
+  //for editor js default component :
+  const DEFAULT_INITIAL_DATA = () => {
+    return {
+      time: 1691867402106,
+      blocks: [
+        {
+          id: "G61UUQLEPX",
+          type: "header",
+          data: { text: "Start Writing Your Blog....", level: 2 },
+        },
+        {
+          id: "QS7dZaETlq",
+          type: "paragraph",
+          data: { text: "asfdasfdsadf hello there&nbsp;" },
+        },
+        { id: "JQtHyPZJ9i", type: "paragraph", data: { text: "asfasf" } },
+        { id: "eLqUsvEHaf", type: "paragraph", data: { text: "asf" } },
+        { id: "SZaxdbn_xF", type: "paragraph", data: { text: "asfd" } },
+      ],
+      version: "2.27.2",
     };
+  };
 
-   const [con , setCon] = useState(null);
+  const [con, setCon] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      // const res = await axios.get(`https://back-e0rl.onrender.com/api/blogs/blog/${blogId}`, config);
+      // const res = await axios.get(`https://localhost/3000/api/blogs/blog/${blogId}`, config);
       const res = await instance.get(`/api/blogs/blog/${blogId}`, config);
       setTitle(res.data.title);
       setDescription(res.data.desc);
@@ -96,12 +116,12 @@ function EditPost() {
       const ImgResult = await imagekit.upload({
         file: file,
         fileName: file.name,
-        folder: '/Covers',
-        tags: ['BlogCover', 'FlashPost', 'Pavan Patchikarla'],
+        folder: "/Covers",
+        tags: ["BlogCover", "FlashPost", "Pavan Patchikarla"],
       });
       setImgUrl(ImgResult.url);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -126,20 +146,24 @@ function EditPost() {
     event.preventDefault();
     const delta = quillRef.current.getContents();
     try {
-      // const res = await axios.put(`https://back-e0rl.onrender.com/api/blogs/update/${blogId}`, {
+      // const res = await axios.put(`https://localhost/3000/api/blogs/update/${blogId}`, {
       //   title,
       //   imgUrl,
       //   desc: description,
       //   tags,
       //   Author: currentUser.name,
       // }, config);
-      const res = await instance.put(`/api/blogs/update/${blogId}`, {
-        title,
-        imgUrl,
-        desc: description,
-        tags,
-        Author: currentUser.name,
-      }, config);
+      const res = await instance.put(
+        `/api/blogs/update/${blogId}`,
+        {
+          title,
+          imgUrl,
+          desc: description,
+          tags,
+          Author: currentUser.name,
+        },
+        config
+      );
 
       console.log(res.data);
     } catch (error) {
@@ -157,41 +181,51 @@ function EditPost() {
 
   const [editor_js_data, setEditor_js_data] = useState(con);
 
-    // Function to handle moving to the TextEditor step
-    const handleNext = () => {
-      if (title === '' || description === '' || tags === '' || coverUrl === '') {
-        toast.error('Please fill all the fields');
-        return;
-      }
-  
-      if (!currentUser) {
-        toast.error('Please login to upload a blog');
-        return;
-      }
-  
-      setShowEditor(true); // Show the TextEditor component
-    };
-  
-    // Function to handle going back to the initial form step
-    const handleBack = () => {
-      setShowEditor(false); // Hide the TextEditor component
-    };
+  // Function to handle moving to the TextEditor step
+  const handleNext = () => {
+    if (title === "" || description === "" || tags === "" || coverUrl === "") {
+      toast.error("Please fill all the fields");
+      return;
+    }
 
+    if (!currentUser) {
+      toast.error("Please login to upload a blog");
+      return;
+    }
 
+    setShowEditor(true); // Show the TextEditor component
+  };
+
+  // Function to handle going back to the initial form step
+  const handleBack = () => {
+    setShowEditor(false); // Hide the TextEditor component
+  };
 
   return (
     <div className="flex flex-col space-y-4 p-4 pt-28 bg-white min-h-screen ">
-      <label className="text-gray-700 font-bold" htmlFor="title">Title:</label>
-      <input value={title} onChange={handleTitleInput} id="title" type="text" className="w-full bg-gray-200 rounded px-3 py-2" />
+      <label className="text-gray-700 font-bold" htmlFor="title">
+        Title:
+      </label>
+      <input
+        value={title}
+        onChange={handleTitleInput}
+        id="title"
+        type="text"
+        className="w-full bg-gray-200 rounded px-3 py-2"
+      />
 
-      <label className="text-gray-700 font-bold" htmlFor="image">Image:</label>
+      <label className="text-gray-700 font-bold" htmlFor="image">
+        Image:
+      </label>
       <input
         type="file"
         onChange={(event) => handleImageUpload(event.target.files[0])}
         className="w-full bg-gray-200 rounded px-3 py-2"
       />
 
-      <label className="text-gray-700 font-bold" htmlFor="description">Description:</label>
+      <label className="text-gray-700 font-bold" htmlFor="description">
+        Description:
+      </label>
       <textarea
         value={description}
         onChange={handleDescriptionInput}
@@ -199,7 +233,9 @@ function EditPost() {
         className="w-full bg-gray-200 rounded px-3 py-2"
       />
 
-      <label className="text-gray-700 font-bold" htmlFor="tags">Tags:</label>
+      <label className="text-gray-700 font-bold" htmlFor="tags">
+        Tags:
+      </label>
       <input
         value={tags}
         onChange={handleTagsInput}
@@ -225,7 +261,11 @@ function EditPost() {
           Edit Content
         </button>
       ) : (
-        <TextEditor onBack={() => setShowEditor(false)} data={con} setdata={setCon} />
+        <TextEditor
+          onBack={() => setShowEditor(false)}
+          data={con}
+          setdata={setCon}
+        />
       )}
     </div>
   );

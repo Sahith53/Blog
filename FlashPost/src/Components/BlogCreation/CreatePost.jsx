@@ -1,59 +1,66 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import ImageKit from 'imagekit';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import TextEditor from './EditorJs';
-import { updateTitle, updateDescription, updateTags, updateContent, updateCoverUrl, resetForm } from '../../redux/formDataSlice';
-import YourComponent from './Spam';
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import ImageKit from "imagekit";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import TextEditor from "./EditorJs";
+import {
+  updateTitle,
+  updateDescription,
+  updateTags,
+  updateContent,
+  updateCoverUrl,
+  resetForm,
+} from "../../redux/formDataSlice";
+import YourComponent from "./Spam";
 
 function QuillEditor() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [tags, setTags] = useState('');
-  const [coverUrl, setCoverUrl] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+  const [coverUrl, setCoverUrl] = useState("");
   const [showEditor, setShowEditor] = useState(false);
 
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const token = localStorage.getItem('jwt');
+  const token = localStorage.getItem("jwt");
   const tok = JSON.parse(token);
   const config = {
-    headers: { Authorization: `Bearer ${tok}` }
+    headers: { Authorization: `Bearer ${tok}` },
   };
 
-  const handleTitleInput = useCallback(event => {
+  const handleTitleInput = useCallback((event) => {
     setTitle(event.target.value);
     dispatch(updateTitle(event.target.value));
   }, []);
 
-  const handleDescriptionInput = useCallback(event => {
+  const handleDescriptionInput = useCallback((event) => {
     setDescription(event.target.value);
     dispatch(updateDescription(event.target.value));
   }, []);
 
-  const handleTagsInput = useCallback(event => {
+  const handleTagsInput = useCallback((event) => {
     const tagsString = event.target.value;
-    const tagarray = tagsString.split(',')
+    const tagarray = tagsString.split(",");
     // remove duplicate tags and # symbol
-    const tagsArray = [...new Set(tagarray.map(tag => tag.trim().replace('#', '')))];
+    const tagsArray = [
+      ...new Set(tagarray.map((tag) => tag.trim().replace("#", ""))),
+    ];
     setTags(tagsArray);
     dispatch(updateTags(tagsArray));
   }, []);
 
-  //for editor js default component : 
+  //for editor js default component :
   const DEFAULT_INITIAL_DATA = () => {
-
-  
     return {
       time: new Date().getTime(),
       blocks: [
         {
-          type: 'header',
+          type: "header",
           data: {
-            text: 'Start Writing Your Blog....',
+            text: "Start Writing Your Blog....",
             level: 2,
           },
         },
@@ -61,7 +68,7 @@ function QuillEditor() {
     };
   };
 
-  const [editor_js_data, setEditor_js_data] = useState(DEFAULT_INITIAL_DATA)
+  const [editor_js_data, setEditor_js_data] = useState(DEFAULT_INITIAL_DATA);
 
   // const handleSubmit = async event => {
   //   event.preventDefault();
@@ -84,7 +91,7 @@ function QuillEditor() {
   //     toast.info('Uploading blog...');
 
   //     const res = await axios.post(
-  //       'https://back-e0rl.onrender.com/api/blogs/uploadBlog',
+  //       'https://localhost/3000/api/blogs/uploadBlog',
   //       {
   //         title,
   //         imgUrl: coverUrl,
@@ -103,52 +110,47 @@ function QuillEditor() {
   // };
 
   const imagekit = new ImageKit({
-    publicKey: 'public_URvjzrf8cUDwCO0A6NK3VOYWg1U=',
-    urlEndpoint: 'https://ik.imagekit.io/cwq19b8fi',
-    privateKey: 'private_gR6kfpKknhbtLmBe7OXtwKJ19h0=',
-    authenticationEndpoint: 'http://localhost:5173/auth',
+    publicKey: "public_URvjzrf8cUDwCO0A6NK3VOYWg1U=",
+    urlEndpoint: "https://ik.imagekit.io/cwq19b8fi",
+    privateKey: "private_gR6kfpKknhbtLmBe7OXtwKJ19h0=",
+    authenticationEndpoint: "http://localhost:5173/auth",
   });
 
-  const handleImageUpload = async file => {
+  const handleImageUpload = async (file) => {
     try {
       const result = await imagekit.upload({
         file: file,
         fileName: file.name,
-        folder: '/Covers',
-        tags: ['BlogCover', 'FlashPost', 'Pavan Patchikarla'],
+        folder: "/Covers",
+        tags: ["BlogCover", "FlashPost", "Pavan Patchikarla"],
       });
       setCoverUrl(result.url);
       dispatch(updateCoverUrl(result.url));
-      console.log('Image uploaded successfully:', result);
+      console.log("Image uploaded successfully:", result);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
     }
   };
 
+  // Function to handle moving to the TextEditor step
+  const handleNext = () => {
+    if (title === "" || description === "" || tags === "" || coverUrl === "") {
+      toast.error("Please fill all the fields");
+      return;
+    }
 
+    if (!currentUser) {
+      toast.error("Please login to upload a blog");
+      return;
+    }
 
-    // Function to handle moving to the TextEditor step
-    const handleNext = () => {
-      if (title === '' || description === '' || tags === '' || coverUrl === '') {
-        toast.error('Please fill all the fields');
-        return;
-      }
-  
-      if (!currentUser) {
-        toast.error('Please login to upload a blog');
-        return;
-      }
-  
-      setShowEditor(true); // Show the TextEditor component
-    };
-  
-    // Function to handle going back to the initial form step
-    const handleBack = () => {
-      setShowEditor(false); // Hide the TextEditor component
-    };
+    setShowEditor(true); // Show the TextEditor component
+  };
 
-
-
+  // Function to handle going back to the initial form step
+  const handleBack = () => {
+    setShowEditor(false); // Hide the TextEditor component
+  };
 
   return (
     <>
@@ -170,7 +172,7 @@ function QuillEditor() {
           />
           <input
             type="file"
-            onChange={event => handleImageUpload(event.target.files[0])}
+            onChange={(event) => handleImageUpload(event.target.files[0])}
           />
           <input
             value={tags}
@@ -185,11 +187,20 @@ function QuillEditor() {
           >
             <center>Next</center>
           </button>
-          {coverUrl && <img src={coverUrl} alt="Blog Cover" className="h-40 object-cover rounded-md" />}
+          {coverUrl && (
+            <img
+              src={coverUrl}
+              alt="Blog Cover"
+              className="h-40 object-cover rounded-md"
+            />
+          )}
           <ToastContainer />
         </div>
       ) : (
-        <TextEditor onBack={handleBack}  data={editor_js_data} setdata={setEditor_js_data}
+        <TextEditor
+          onBack={handleBack}
+          data={editor_js_data}
+          setdata={setEditor_js_data}
         /> //Show the TextEditor component
       )}
     </>

@@ -39,7 +39,7 @@ function BlogDetails() {
   const [authorDetails, setAuthorDetails] = useState({});
 
   const [con, setCon] = useState(redD);
-  const [blogLike , setBlogLike] = useState(0);
+  const [blogLike, setBlogLike] = useState(0);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -48,8 +48,8 @@ function BlogDetails() {
         const blog_data = response.data;
         setBlog(blog_data);
         setCon(JSON.parse(blog_data.Content));
-        setBlogLike(blog_data.likes)
-        console.log(blogLike)
+        setBlogLike(blog_data.likes);
+        console.log(blogLike);
       } catch (error) {
         console.error(error);
       }
@@ -60,7 +60,7 @@ function BlogDetails() {
 
   const fetchUserProfile = async () => {
     // const res = await fetch(
-    //   `https://back-e0rl.onrender.com/api/users/${blog.Author}`
+    //   `https://localhost/3000/api/users/${blog.Author}`
     // ); //todo
     const res = await instance.get(`/api/users/${blog.Author}`);
     const data = await res.json();
@@ -77,7 +77,6 @@ function BlogDetails() {
       return <p>{blog.Content}</p>;
     }
   };
-
 
   return (
     <>
@@ -98,7 +97,9 @@ function BlogDetails() {
                 </div>
 
                 <div className="">
-                  <h1 className="lg:text-4xl  text-2xl mx-10 flex flex-wrap px-2 lg:px-1 font-bold my-3 ">{blog.title}</h1>
+                  <h1 className="lg:text-4xl  text-2xl mx-10 flex flex-wrap px-2 lg:px-1 font-bold my-3 ">
+                    {blog.title}
+                  </h1>
                 </div>
                 <div className="w-full flex justify-center   items-center  bg-white  max-h-full bg-clip-padding overflow-auto">
                   {/* <Author post_id={blogId} name={blog.Author} /> */}
@@ -116,7 +117,6 @@ function BlogDetails() {
                 </div>
               </div>
             </div>
-   
           </div>
           <div className="w-full">
             <div className=" ">

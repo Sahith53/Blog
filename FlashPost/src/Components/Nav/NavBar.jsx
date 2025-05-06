@@ -20,9 +20,8 @@ import instance from "../../Config/AxiosInst.js";
 import Author from "../MainContent/Author.jsx";
 import { AuthContext } from "../../context/userContext.jsx";
 
-
 function NavBar() {
-  const { authUser, isLoading ,  setAuthUser, } = useContext(AuthContext);
+  const { authUser, isLoading, setAuthUser } = useContext(AuthContext);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -43,7 +42,7 @@ function NavBar() {
   const [user, setUser] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      //  const res = await axios.get('https://back-e0rl.onrender.com/api/auth/read', config)
+      //  const res = await axios.get('https://localhost/3000/api/auth/read', config)
       const res = await instance.get("/api/auth/read", config);
       setUser(res.data);
       setAuthUser(res.data);
@@ -117,7 +116,7 @@ function NavBar() {
       toast.info("Uploading blog...");
 
       // const res = await axios.put(
-      //   `https://back-e0rl.onrender.com/api/blogs/update/${blogId}`,
+      //   `https://localhost/3000/api/blogs/update/${blogId}`,
       //   {
       //     title,
       //     imgUrl: coverUrl,
@@ -183,7 +182,7 @@ function NavBar() {
     try {
       toast.info("Uploading blog...");
       // const res = await axios.post(
-      //   'https://back-e0rl.onrender.com/api/blogs/uploadBlog',
+      //   'https://localhost/3000/api/blogs/uploadBlog',
       //   {
       //     title,
       //     imgUrl: coverUrl,

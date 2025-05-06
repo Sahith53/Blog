@@ -26,7 +26,7 @@ const LoginForm = () => {
 
     try {
       const res = await toast.promise(
-        axios.post("https://back-e0rl.onrender.com/api/auth/signin", {
+        axios.post("https://localhost/3000/api/auth/signin", {
           name,
           password,
         }),
@@ -47,7 +47,7 @@ const LoginForm = () => {
       };
 
       axios
-        .get("https://back-e0rl.onrender.com/api/auth/read", config)
+        .get("https://localhost/3000/api/auth/read", config)
         .then((res) => {
           moengage.initialize({ app_id: "PBW9V6VMZM36LC5735AYWUSI" });
           console.log(

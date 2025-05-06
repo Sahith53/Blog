@@ -15,9 +15,7 @@ export default function Modal(props) {
   const [members2, setMembers2] = useState([]);
 
   async function fetchMembers(id) {
-    const res = await fetch(
-      `https://back-e0rl.onrender.com/api/users/fetchId/${id}`
-    );
+    const res = await fetch(`https://localhost/3000/api/users/fetchId/${id}`);
     // const res = await instance.get(`/api/users/fetchId/${id}`);
     const data = await res.json();
     setMembers((prevMembers) => [...prevMembers, data]); // Using the functional update to access the previous state.

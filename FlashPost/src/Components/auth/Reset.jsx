@@ -1,16 +1,13 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function Reset() {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-
-
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const { token } = useParams();
 
@@ -26,64 +23,69 @@ export default function Reset() {
     e.preventDefault();
 
     // Validate the password
-    if(password !== confirmPassword){
-      toast.error("Password don't match")
-      return 
+    if (password !== confirmPassword) {
+      toast.error("Password don't match");
+      return;
     }
 
-
     // TODO: Implement password reset logic
-    console.log('Token:', token);
-    console.log('New Password:', password);
-    console.log('email:', email)
-
+    console.log("Token:", token);
+    console.log("New Password:", password);
+    console.log("email:", email);
 
     validateToken();
-
-  
-
-
   };
 
   const validateToken = async () => {
     try {
-      const res = await axios.post(`https://back-e0rl.onrender.com/api/auth/validate-password-token/${token}` , {'email' : email , 'password' : password});
+      const res = await axios.post(
+        `https://localhost/3000/api/auth/validate-password-token/${token}`,
+        { email: email, password: password }
+      );
       console.log(res);
       toast.success(res.data.message);
-      const res2 = await axios.post(`https://back-e0rl.onrender.com/api/auth/password-reset-ack` , {'email' : email});
+      const res2 = await axios.post(
+        `https://localhost/3000/api/auth/password-reset-ack`,
+        { email: email }
+      );
 
-        // Reset the form fields
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
+      // Reset the form fields
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
 
-    //send mail to user for conformation : 
+      //send mail to user for conformation :
 
-   
-    //navigate to login page 
-    window.location.href = "/login"
-
+      //navigate to login page
+      window.location.href = "/login";
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message);
     }
   };
 
-
-
   return (
     <section className="bg-neutral-200 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-         FlashPost
+        <a
+          href="#"
+          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+        >
+          FlashPost
         </a>
         <div className="w-full p-6 bg-primary rounded-lg shadow dark:border md:mt-0 sm:max-w-md backdrop-filter backdrop-blur-sm bg-opacity-100 border border-gray-100 dark:border-gray-700 sm:p-8">
           <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Change Password
           </h2>
-          <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" onSubmit={handleSubmit}>
+          <form
+            className="mt-4 space-y-4 lg:mt-5 md:space-y-5"
+            onSubmit={handleSubmit}
+          >
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
                 Your email
               </label>
               <input
@@ -98,7 +100,10 @@ export default function Reset() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
                 New Password
               </label>
               <input
@@ -113,7 +118,10 @@ export default function Reset() {
               />
             </div>
             <div>
-              <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label
+                htmlFor="confirm-password"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
                 Confirm password
               </label>
               <input
@@ -138,8 +146,11 @@ export default function Reset() {
                 />
               </div>
               <div className="ml-3 text-sm">
-                <label htmlFor="newsletter" className="font-light text-gray-500 dark:text-gray-300">
-                  I accept the{' '}
+                <label
+                  htmlFor="newsletter"
+                  className="font-light text-gray-500 dark:text-gray-300"
+                >
+                  I accept the{" "}
                   <a
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                     href="#"

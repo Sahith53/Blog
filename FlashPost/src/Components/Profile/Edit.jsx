@@ -27,7 +27,7 @@ const Edit = () => {
 
   const handleUpdate = async () => {
     try {
-      const url = `http://back-e0rl.onrender.com/api/users/${currentId}/editProfile`;
+      const url = `http://localhost/3000/api/users/${currentId}/editProfile`;
 
       const response = await axios.put(
         url,

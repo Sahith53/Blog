@@ -16,7 +16,7 @@ const Book = () => {
   }, [currentUser]);
 
   const fetchBlogData = async (blogId) => {
-    const res = await fetch(`https://back-e0rl.onrender.com/api/blogs/blog/${blogId}`);
+    const res = await fetch(`https://localhost/3000/api/blogs/blog/${blogId}`);
     const data = await res.json();
     return data;
   };
@@ -36,9 +36,9 @@ const Book = () => {
     <div>
       {blogs.map((blog) => (
         <div className="bg-white m-2 rounded-xl p-4 pr-10 mb-4 hover:scale-95 transition-all cursor-pointer">
-        <Link to={`/blog/@${blog.Author}/${blog._id}`}>
-        <BlogCards key={blog.blog_id} blog={blog} />
-        </Link>
+          <Link to={`/blog/@${blog.Author}/${blog._id}`}>
+            <BlogCards key={blog.blog_id} blog={blog} />
+          </Link>
         </div>
       ))}
     </div>

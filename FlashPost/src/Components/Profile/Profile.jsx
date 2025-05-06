@@ -70,7 +70,7 @@ function ProfileComponent() {
     if (User1) {
       getUser();
     } else {
-      toast.error("User not found"); 
+      toast.error("User not found");
     }
   }, [User1]);
 
@@ -105,7 +105,7 @@ function ProfileComponent() {
     }
 
     const res = await axios.post(
-      "https://back-e0rl.onrender.com/api/follow",
+      "https://localhost/3000/api/follow",
       {
         userId: idus, //current user from local storage bro marchipoku :
         followId: followID, //user of profile : from params name : User
@@ -125,7 +125,7 @@ function ProfileComponent() {
     }
 
     const res = await axios.post(
-      "https://back-e0rl.onrender.com/api/unfollow",
+      "https://localhost/3000/api/unfollow",
       {
         userId: idus, //current user from local storage bro marchipoku :
         unfollowId: followID, //user of profile : from params name : User
@@ -171,7 +171,7 @@ function ProfileComponent() {
 
   return (
     <>
-    {/* <ProfileHeader user={user} 
+      {/* <ProfileHeader user={user} 
       isCurrentUser={isCurrentUser}
       follow={follow}
       Unfollow={Unfollow}
@@ -289,12 +289,10 @@ function ProfileComponent() {
           </div>
           {/* social buttons   */}
           <div>
-            <SocialLinks
-             />
+            <SocialLinks />
           </div>
           <div>
-            <TechStack
-             />
+            <TechStack />
           </div>
           <div>
             <LatestPosts />

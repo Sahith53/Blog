@@ -1,4 +1,4 @@
-import React, { useRef , useContext } from "react";
+import React, { useRef, useContext } from "react";
 import { motion } from "framer-motion";
 import ImageKit from "imagekit";
 import axios from "axios";
@@ -30,7 +30,7 @@ const ProfilePictureComponent = ({ user, getUser }) => {
       });
 
       await axios.put(
-        `https://back-e0rl.onrender.com/api/users/${authUser._id}/uploadProfile`,
+        `https://localhost/3000/api/users/${authUser._id}/uploadProfile`,
         { bodyPicture: profileUpload.url },
         {
           headers: {
